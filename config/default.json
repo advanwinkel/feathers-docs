@@ -1,0 +1,20 @@
+{
+  "host": "localhost",
+  "port": 3030,
+  "sqlite": "../data/fDocs.sqlite",
+  "public": "../public/",
+  "auth": {
+    "idField": "id",
+    "token": {
+      "secret": "5Q/k5C68LyYs8ZlP9yvuyANOUQHMQozMeDO4BvjjAIUB9M1cb1ESqwICrwCu72G4a9h8S4hp8lUD01nEsQCT2Q=="
+    },
+    "local": {},
+    "facebook": {
+      "clientID": "your facebook client id",
+      "clientSecret": "your facebook client secret",
+      "permissions": {
+        "scope": ["public_profile","email"]
+      }
+    }
+  }
+}
