@@ -83,9 +83,11 @@
             <th>Text</th>
         </tr>
         <tr v-for="document in $parent.documents" is="document" :document="document"></tr>
-        <p class="lead">Here's a list of all your documents.
-                <button @click="$parent.createDocument()" class="btn btn-primary">Add a new one?</button>
-            </p>
+        <p>
+          <h2>Here's a list of all your documents.</h2>
+           <label for="file">Add a document</label>
+          <input type="file" name="file" @change="$parent.onFileChange">
+        </p>
       </table>
     </div>   
   </template>

@@ -9,6 +9,7 @@ const app = feathers()
 
 const documentsService = app.service('/documents');
 const usersService= app.service('/users');
+const uploadService = app.service('uploads');
 
 Vue.component('topnav', {
   template: '#topnav-template',
@@ -104,12 +105,13 @@ vm = new Vue({
 
   },
   methods: {
-   createDocument: function () {
+   createDocument: function (fileId) {
       var newDocument = {
           title: "",
           author: "",
           text: "",
-          editing: true
+          editing: true,
+          fileName: fileId
       };
       this.documents.push(newDocument);
     },
@@ -146,6 +148,25 @@ vm = new Vue({
         console.error('Error authenticating!', error);
       });
 
+    },
+    onFileChange: function onFileChange(e) {
+      var files = e.target.files || e.dataTransfer.files;
+      if (!files.length) return;
+      this.doUpload(files[0]);
+    },
+    doUpload: function (file) {
+      var reader = new FileReader();
+ 
+      reader.onload = function (e) {
+        uploadService
+        .create({uri: e.target.result})
+        .then(function(response){
+                // success
+                console.log('Server responded with: ', response);
+                vm.createDocument(response.id); 
+            });       
+      };
+      reader.readAsDataURL(file);
     }    
   }
 })
