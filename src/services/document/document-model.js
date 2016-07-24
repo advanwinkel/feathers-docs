@@ -24,7 +24,11 @@ module.exports = function(sequelize) {
     sentBy: {
       type: Sequelize.INTEGER,
       allowNull: false
-    }   
+    },
+    fileName: {
+      type: Sequelize.STRING,
+      allowNull: false 
+    }  
   }, {
     freezeTableName: true
   });
