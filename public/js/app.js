@@ -53,6 +53,7 @@ Vue.component('document', {
         deleteDocument: function (document) {
             vm.documents.$remove(document);
             documentsService.remove(document.id, {});
+            uploadService.remove(document.fileName);
         },
         editDocument: function (document) {
           document.editing = true;
@@ -68,6 +69,12 @@ Vue.component('document', {
               document.editing = false;
             })
         },
+        downloadDocument: function(document) {
+          uploadService.get(document.fileName).then(function(fileObject) {
+            const blob = dataURLtoBlob(fileObject.uri);
+            saveAs(blob, fileObject.id);
+          })
+        }
     }
 })
 
@@ -170,4 +177,15 @@ vm = new Vue({
     }    
   }
 })
+
+// Helper function for converting dataurl to blob
+//(see: http://stackoverflow.com/questions/6850276/how-to-convert-dataurl-to-file-object-in-javascript)
+function dataURLtoBlob(dataurl) {
+    var arr = dataurl.split(','), mime = arr[0].match(/:(.*?);/)[1],
+        bstr = atob(arr[1]), n = bstr.length, u8arr = new Uint8Array(n);
+    while(n--){
+        u8arr[n] = bstr.charCodeAt(n);
+    }
+    return new Blob([u8arr], {type:mime});
+}
 
