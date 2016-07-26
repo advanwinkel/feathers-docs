@@ -1,5 +1,7 @@
 'use strict';
 
+const removeUploadedFileFromResponse = require('./removeUploadedFileFromResponse');
+
 const globalHooks = require('../../../hooks');
 const hooks = require('feathers-hooks');
 const auth = require('feathers-authentication').hooks;
@@ -19,7 +21,7 @@ exports.after = {
   all: [],
   find: [],
   get: [],
-  create: [],
+  create: [removeUploadedFileFromResponse()],
   update: [],
   patch: [],
   remove: []
