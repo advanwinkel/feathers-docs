@@ -24,6 +24,11 @@ module.exports = function(){
 
   // Set up our after hooks
   uploadService.after(hooks.after);
+
+   // Set up event filter to prevent upload events to be sent
+  uploadService.filter(function(data, connection) {
+    return false;
+  });
 };
 
 module.exports.Service = blobService;

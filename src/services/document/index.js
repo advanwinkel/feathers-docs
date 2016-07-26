@@ -26,4 +26,14 @@ module.exports = function(){
 
   // Set up our after hooks
   documentService.after(hooks.after);
+
+
+  // Set up event filter to prevent events to be sent to others than the logged-on user
+  documentService.filter(function(data, connection) {
+    if(connection.user.id !== data.dataValues.sentBy) {
+      return false;
+    }
+
+    return data;
+  });
 };
