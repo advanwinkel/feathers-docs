@@ -50,29 +50,41 @@
 
 	var _vue2 = _interopRequireDefault(_vue);
 
-	var _client = __webpack_require__(3);
+	var _Topnav = __webpack_require__(3);
+
+	var _Topnav2 = _interopRequireDefault(_Topnav);
+
+	var _Login = __webpack_require__(6);
+
+	var _Login2 = _interopRequireDefault(_Login);
+
+	var _Signup = __webpack_require__(8);
+
+	var _Signup2 = _interopRequireDefault(_Signup);
+
+	var _Doclist = __webpack_require__(11);
+
+	var _Doclist2 = _interopRequireDefault(_Doclist);
+
+	var _client = __webpack_require__(21);
 
 	var _client2 = _interopRequireDefault(_client);
 
-	var _feathersHooks = __webpack_require__(23);
+	var _feathersHooks = __webpack_require__(41);
 
 	var _feathersHooks2 = _interopRequireDefault(_feathersHooks);
 
-	var _client3 = __webpack_require__(27);
+	var _client3 = __webpack_require__(45);
 
 	var _client4 = _interopRequireDefault(_client3);
 
-	var _client5 = __webpack_require__(31);
+	var _client5 = __webpack_require__(49);
 
 	var _client6 = _interopRequireDefault(_client5);
 
-	var _socket = __webpack_require__(36);
+	var _socket = __webpack_require__(54);
 
 	var _socket2 = _interopRequireDefault(_socket);
-
-	var _fileSaver = __webpack_require__(80);
-
-	var _fileSaver2 = _interopRequireDefault(_fileSaver);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -86,73 +98,6 @@
 	var usersService = app.service('/users');
 	var uploadService = app.service('uploads');
 
-	_vue2.default.component('topnav', {
-	  template: '#topnav-template',
-	  methods: {
-	    showLogin: function showLogin() {
-	      this.$parent.login = true;
-	      this.$parent.logsign = true;
-	    },
-	    showSignup: function showSignup() {
-	      this.$parent.signup = true;
-	      this.$parent.logsign = true;
-	    }
-	  }
-	});
-
-	_vue2.default.component('login', {
-	  template: '#login-template'
-	});
-
-	_vue2.default.component('signup', {
-	  template: '#signup-template',
-	  methods: {
-	    doSignup: function doSignup() {
-	      this.$parent.signup = false;
-	      self = this;
-	      usersService.create({ email: this.$parent.email, password: this.$parent.password }, {}).then(function (response) {
-	        vm.doLogin();
-	      });
-	    }
-	  }
-	});
-
-	_vue2.default.component('doclist', {
-	  template: '#doclist-template'
-	});
-
-	_vue2.default.component('document', {
-	  template: '#document-template',
-	  props: ['document'],
-	  methods: {
-	    deleteDocument: function deleteDocument(document) {
-	      vm.documents.$remove(document);
-	      documentsService.remove(document.id, {});
-	      uploadService.remove(document.fileName);
-	    },
-	    editDocument: function editDocument(document) {
-	      document.editing = true;
-	    },
-	    updateDocument: function updateDocument(document) {
-	      documentsService.patch(document.id, document, {});
-	      //Set editing to false to show actions again and hide the inputs
-	      document.editing = false;
-	    },
-	    storeDocument: function storeDocument(document) {
-	      documentsService.create(document, {}).then(function (response) {
-	        _vue2.default.set(document, 'id', response.id);
-	        document.editing = false;
-	      });
-	    },
-	    downloadDocument: function downloadDocument(document) {
-	      uploadService.get(document.fileName).then(function (fileObject) {
-	        var blob = dataURLtoBlob(fileObject.uri);
-	        _fileSaver2.default.saveAs(blob, fileObject.id);
-	      });
-	    }
-	  }
-	});
-
 	var vm = new _vue2.default({
 	  el: '#v-app',
 	  data: {
@@ -163,7 +108,15 @@
 	    documents: [],
 	    email: "",
 	    password: "",
-	    jwt: ""
+	    jwt: "",
+	    documentsService: documentsService,
+	    uploadService: uploadService
+	  },
+	  components: {
+	    Topnav: _Topnav2.default,
+	    Login: _Login2.default,
+	    Signup: _Signup2.default,
+	    Doclist: _Doclist2.default
 	  },
 	  ready: function ready() {
 	    var _this = this;
@@ -258,20 +211,6 @@
 	    }
 	  }
 	});
-
-	// Helper function for converting dataurl to blob, so it can be saved using FileSaver.js
-	//(from: http://stackoverflow.com/questions/6850276/how-to-convert-dataurl-to-file-object-in-javascript)
-	function dataURLtoBlob(dataurl) {
-	  var arr = dataurl.split(','),
-	      mime = arr[0].match(/:(.*?);/)[1],
-	      bstr = atob(arr[1]),
-	      n = bstr.length,
-	      u8arr = new Uint8Array(n);
-	  while (n--) {
-	    u8arr[n] = bstr.charCodeAt(n);
-	  }
-	  return new Blob([u8arr], { type: mime });
-	}
 
 /***/ },
 /* 1 */
@@ -10523,11 +10462,614 @@
 /* 3 */
 /***/ function(module, exports, __webpack_require__) {
 
-	module.exports = __webpack_require__(4);
-
+	var __vue_script__, __vue_template__
+	__vue_script__ = __webpack_require__(4)
+	__vue_template__ = __webpack_require__(5)
+	module.exports = __vue_script__ || {}
+	if (module.exports.__esModule) module.exports = module.exports.default
+	if (__vue_template__) { (typeof module.exports === "function" ? module.exports.options : module.exports).template = __vue_template__ }
+	if (false) {(function () {  module.hot.accept()
+	  var hotAPI = require("vue-hot-reload-api")
+	  hotAPI.install(require("vue"), true)
+	  if (!hotAPI.compatible) return
+	  var id = "/home/ad/f-docs2/public/components/Topnav.vue"
+	  if (!module.hot.data) {
+	    hotAPI.createRecord(id, module.exports)
+	  } else {
+	    hotAPI.update(id, module.exports, __vue_template__)
+	  }
+	})()}
 
 /***/ },
 /* 4 */
+/***/ function(module, exports) {
+
+	"use strict";
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	// <template>
+	//   <nav class="navbar navbar-default navbar-static-top">
+	//     <div class="btn-group" v-if="!$parent.logsign">
+	//         <button @click="showLogin">LogIn</button>
+	//         <button @click="showSignup">SignUp</button>
+	//     </div>
+	//     <div class="btn-group" v-if=$parent.docList>
+	//       Logged-in user: {{$parent.email}}
+	//     </div>
+	//   </nav>
+	// </template>
+	//
+	// <script>
+	exports.default = {
+	  methods: {
+	    showLogin: function showLogin() {
+	      this.$parent.login = true;
+	      this.$parent.logsign = true;
+	    },
+	    showSignup: function showSignup() {
+	      this.$parent.signup = true;
+	      this.$parent.logsign = true;
+	    }
+	  }
+	};
+	// </script>
+
+/***/ },
+/* 5 */
+/***/ function(module, exports) {
+
+	module.exports = "\n  <nav class=\"navbar navbar-default navbar-static-top\">\n    <div class=\"btn-group\" v-if=\"!$parent.logsign\">\n        <button @click=\"showLogin\">LogIn</button>\n        <button @click=\"showSignup\">SignUp</button>\n    </div>\n    <div class=\"btn-group\" v-if=$parent.docList>\n      Logged-in user: {{$parent.email}}\n    </div>\n  </nav>\n";
+
+/***/ },
+/* 6 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var __vue_script__, __vue_template__
+	__vue_template__ = __webpack_require__(7)
+	module.exports = __vue_script__ || {}
+	if (module.exports.__esModule) module.exports = module.exports.default
+	if (__vue_template__) { (typeof module.exports === "function" ? module.exports.options : module.exports).template = __vue_template__ }
+	if (false) {(function () {  module.hot.accept()
+	  var hotAPI = require("vue-hot-reload-api")
+	  hotAPI.install(require("vue"), true)
+	  if (!hotAPI.compatible) return
+	  var id = "/home/ad/f-docs2/public/components/Login.vue"
+	  if (!module.hot.data) {
+	    hotAPI.createRecord(id, module.exports)
+	  } else {
+	    hotAPI.update(id, module.exports, __vue_template__)
+	  }
+	})()}
+
+/***/ },
+/* 7 */
+/***/ function(module, exports) {
+
+	module.exports = "\n  <div class=\"login-grp\"  v-if=\"$parent.login\">\n    <div class=\"row\">\n      <div class=\"col-12 col-6-tablet push-3-tablet text-center\">\n        <h1 class=\"font-100\">Welcome Back</h1>\n      </div>\n    \n      <div class=\"col-12 col-6-tablet push-3-tablet col-4-desktop push-4-desktop text-center\">\n        <form id=formLogin>\n          <fieldset>\n            <input type=\"email\" v-model=\"$parent.email\" placeholder=\"email\">\n          </fieldset>\n          <fieldset>\n            <input type=\"password\" v-model=\"$parent.password\" placeholder=\"password\">\n          </fieldset>\n          <button type=\"submit\" class=\"button button-primary\" v-on:click.prevent=\"$parent.doLogin\">\n            Login\n          </button>\n        </form>\n      </div>\n    </div>\n  </div>\n";
+
+/***/ },
+/* 8 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var __vue_script__, __vue_template__
+	__vue_script__ = __webpack_require__(9)
+	__vue_template__ = __webpack_require__(10)
+	module.exports = __vue_script__ || {}
+	if (module.exports.__esModule) module.exports = module.exports.default
+	if (__vue_template__) { (typeof module.exports === "function" ? module.exports.options : module.exports).template = __vue_template__ }
+	if (false) {(function () {  module.hot.accept()
+	  var hotAPI = require("vue-hot-reload-api")
+	  hotAPI.install(require("vue"), true)
+	  if (!hotAPI.compatible) return
+	  var id = "/home/ad/f-docs2/public/components/Signup.vue"
+	  if (!module.hot.data) {
+	    hotAPI.createRecord(id, module.exports)
+	  } else {
+	    hotAPI.update(id, module.exports, __vue_template__)
+	  }
+	})()}
+
+/***/ },
+/* 9 */
+/***/ function(module, exports) {
+
+	"use strict";
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	// <template id="signup-template">
+	//   <div class="row" v-if="$parent.signup">
+	//     <div class="col-12 col-6-tablet push-3-tablet text-center">
+	//       <h1 class="font-100">Create an Account</h1>
+	//     </div>
+	//
+	//       <div class="col-12 col-6-tablet push-3-tablet col-4-desktop push-4-desktop text-center">
+	//         <form class="form">
+	//           <fieldset>
+	//             <input class="block" type="email" v-model="$parent.email" placeholder="email">
+	//           </fieldset>
+	//           <fieldset>
+	//             <input class="block" type="password" v-model="$parent.password" placeholder="password">
+	//           </fieldset>
+	//           <button type="submit" class="button button-primary" v-on:click.prevent="doSignup">
+	//             Signup
+	//           </button>
+	//         </form>
+	//       </div>
+	//     </div>   
+	// </template>
+	//
+	// <script>
+	exports.default = {
+	  methods: {
+	    doSignup: function doSignup() {
+	      this.$parent.signup = false;
+	      self = this;
+	      usersService.create({ email: this.$parent.email, password: this.$parent.password }, {}).then(function (response) {
+	        vm.doLogin();
+	      });
+	    }
+	  }
+	};
+	// </script>
+
+/***/ },
+/* 10 */
+/***/ function(module, exports) {
+
+	module.exports = "\n  <div class=\"row\" v-if=\"$parent.signup\">\n    <div class=\"col-12 col-6-tablet push-3-tablet text-center\">\n      <h1 class=\"font-100\">Create an Account</h1>\n    </div>\n  \n      <div class=\"col-12 col-6-tablet push-3-tablet col-4-desktop push-4-desktop text-center\">\n        <form class=\"form\">\n          <fieldset>\n            <input class=\"block\" type=\"email\" v-model=\"$parent.email\" placeholder=\"email\">\n          </fieldset>\n          <fieldset>\n            <input class=\"block\" type=\"password\" v-model=\"$parent.password\" placeholder=\"password\">\n          </fieldset>\n          <button type=\"submit\" class=\"button button-primary\" v-on:click.prevent=\"doSignup\">\n            Signup\n          </button>\n        </form>\n      </div>\n    </div>   \n";
+
+/***/ },
+/* 11 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var __vue_script__, __vue_template__
+	__vue_script__ = __webpack_require__(12)
+	__vue_template__ = __webpack_require__(20)
+	module.exports = __vue_script__ || {}
+	if (module.exports.__esModule) module.exports = module.exports.default
+	if (__vue_template__) { (typeof module.exports === "function" ? module.exports.options : module.exports).template = __vue_template__ }
+	if (false) {(function () {  module.hot.accept()
+	  var hotAPI = require("vue-hot-reload-api")
+	  hotAPI.install(require("vue"), true)
+	  if (!hotAPI.compatible) return
+	  var id = "/home/ad/f-docs2/public/components/Doclist.vue"
+	  if (!module.hot.data) {
+	    hotAPI.createRecord(id, module.exports)
+	  } else {
+	    hotAPI.update(id, module.exports, __vue_template__)
+	  }
+	})()}
+
+/***/ },
+/* 12 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+
+	var _Document = __webpack_require__(13);
+
+	var _Document2 = _interopRequireDefault(_Document);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	exports.default = {
+	  components: {
+	    Document: _Document2.default
+	  }
+	};
+	// </script>
+	//
+	// <template id="doclist-template">
+	//   <div class="doclist-grp" v-if="$parent.docList">
+	//     <table class="table table-striped">
+	//       <tr>
+	//           <th>Id</th>
+	//           <th>Title</th>
+	//           <th>Author</th>
+	//           <th>Text</th>
+	//       </tr>
+	//       <tr v-for="document in $parent.documents" is="document" :document="document"></tr>
+	//       <p>
+	//         <h2>Here's a list of all your documents.</h2>
+	//          <label for="file">Add a document</label>
+	//         <input type="file" name="file" @change="$parent.onFileChange">
+	//       </p>
+	//     </table>
+	//   </div>   
+	// </template>
+	//
+	// <script>
+
+/***/ },
+/* 13 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var __vue_script__, __vue_template__
+	__vue_script__ = __webpack_require__(14)
+	__vue_template__ = __webpack_require__(19)
+	module.exports = __vue_script__ || {}
+	if (module.exports.__esModule) module.exports = module.exports.default
+	if (__vue_template__) { (typeof module.exports === "function" ? module.exports.options : module.exports).template = __vue_template__ }
+	if (false) {(function () {  module.hot.accept()
+	  var hotAPI = require("vue-hot-reload-api")
+	  hotAPI.install(require("vue"), true)
+	  if (!hotAPI.compatible) return
+	  var id = "/home/ad/f-docs2/public/components/Document.vue"
+	  if (!module.hot.data) {
+	    hotAPI.createRecord(id, module.exports)
+	  } else {
+	    hotAPI.update(id, module.exports, __vue_template__)
+	  }
+	})()}
+
+/***/ },
+/* 14 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+
+	var _vue = __webpack_require__(1);
+
+	var _vue2 = _interopRequireDefault(_vue);
+
+	var _helpers = __webpack_require__(15);
+
+	var _fileSaver = __webpack_require__(16);
+
+	var _fileSaver2 = _interopRequireDefault(_fileSaver);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	exports.default = {
+	  props: ['document'],
+	  methods: {
+	    deleteDocument: function deleteDocument(document) {
+	      this.$root.documents.$remove(document);
+	      this.$root.documentsService.remove(document.id, {});
+	      this.$root.uploadService.remove(document.fileName);
+	    },
+	    editDocument: function editDocument(document) {
+	      document.editing = true;
+	    },
+	    updateDocument: function updateDocument(document) {
+	      this.$root.documentsService.patch(document.id, document, {});
+	      //Set editing to false to show actions again and hide the inputs
+	      document.editing = false;
+	    },
+	    storeDocument: function storeDocument(document) {
+	      self = this;
+	      this.$root.documentsService.create(document, {}).then(function (response) {
+	        _vue2.default.set(document, 'id', response.id);
+	        document.editing = false;
+	      });
+	    },
+	    downloadDocument: function downloadDocument(document) {
+	      this.$root.uploadService.get(document.fileName).then(function (fileObject) {
+	        var blob = (0, _helpers.dataURLtoBlob)(fileObject.uri);
+	        _fileSaver2.default.saveAs(blob, fileObject.id);
+	      });
+	    }
+	  }
+	};
+	// </script>
+	//
+	//
+	// <template>
+	//   <tr>
+	//     <td>
+	//         {{document.id}}
+	//     </td>
+	//     <td class="col-md-6">
+	//         <input v-if="document.editing" v-model="document.title" class="form-control">
+	//         </input>
+	//         <!--in other occasions show the story plot-->
+	//             <span v-else>
+	//                 {{document.title}}
+	//             </span>
+	//     </td>
+	//     <td>
+	//         <input v-if="document.editing" v-model="document.author" class="form-control">
+	//         </input>
+	//         <!--in other occasions show the story writer-->
+	//             <span v-else>
+	//                 {{document.author}}
+	//             </span>
+	//     </td>
+	//     <td>
+	//         <input v-if="document.editing" v-model="document.text" class="form-control">
+	//         </input>
+	//         <!--in other occasions show the story writer-->
+	//             <span v-else>
+	//                 {{document.text}}
+	//             </span>
+	//     </td>
+	//     <td>   
+	//       <div class="btn-group" v-if="!document.editing">
+	//           <button @click="editDocument(document)" class="btn btn-default">Edit</button>
+	//           <button @click="deleteDocument(document)" class="btn btn-danger">Delete</button>
+	//           <button @click="downloadDocument(document)" class="btn btn-default">Download</button>
+	//       </div>
+	//       <div class="btn-group" v-else>
+	//           <!--If the document is taken from the db then it will have an id-->
+	//           <button v-if="document.id" class="btn btn-primary" @click="updateDocument(document)">Update Document
+	//           </button>
+	//           <!--If the document is new we want to store it-->
+	//           <button v-else class="btn btn-success" @click="storeDocument(document)">Save New Document</button>
+	//           <!--Always show cancel-->
+	//           <button @click="document.editing=false" class="btn btn-default">Cancel</button>
+	//       </div>
+	//     </td>
+	//   </tr>
+	// </template>
+	//
+	// <script>
+
+/***/ },
+/* 15 */
+/***/ function(module, exports) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+	exports.dataURLtoBlob = dataURLtoBlob;
+	// Helper function for converting dataurl to blob, so it can be saved using FileSaver.js
+	//(from: http://stackoverflow.com/questions/6850276/how-to-convert-dataurl-to-file-object-in-javascript)
+	function dataURLtoBlob(dataurl) {
+	    var arr = dataurl.split(','),
+	        mime = arr[0].match(/:(.*?);/)[1],
+	        bstr = atob(arr[1]),
+	        n = bstr.length,
+	        u8arr = new Uint8Array(n);
+	    while (n--) {
+	        u8arr[n] = bstr.charCodeAt(n);
+	    }
+	    return new Blob([u8arr], { type: mime });
+	}
+
+/***/ },
+/* 16 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/* FileSaver.js
+	 * A saveAs() FileSaver implementation.
+	 * 1.3.2
+	 * 2016-06-16 18:25:19
+	 *
+	 * By Eli Grey, http://eligrey.com
+	 * License: MIT
+	 *   See https://github.com/eligrey/FileSaver.js/blob/master/LICENSE.md
+	 */
+
+	/*global self */
+	/*jslint bitwise: true, indent: 4, laxbreak: true, laxcomma: true, smarttabs: true, plusplus: true */
+
+	/*! @source http://purl.eligrey.com/github/FileSaver.js/blob/master/FileSaver.js */
+
+	var saveAs = saveAs || (function(view) {
+		"use strict";
+		// IE <10 is explicitly unsupported
+		if (typeof view === "undefined" || typeof navigator !== "undefined" && /MSIE [1-9]\./.test(navigator.userAgent)) {
+			return;
+		}
+		var
+			  doc = view.document
+			  // only get URL when necessary in case Blob.js hasn't overridden it yet
+			, get_URL = function() {
+				return view.URL || view.webkitURL || view;
+			}
+			, save_link = doc.createElementNS("http://www.w3.org/1999/xhtml", "a")
+			, can_use_save_link = "download" in save_link
+			, click = function(node) {
+				var event = new MouseEvent("click");
+				node.dispatchEvent(event);
+			}
+			, is_safari = /constructor/i.test(view.HTMLElement)
+			, is_chrome_ios =/CriOS\/[\d]+/.test(navigator.userAgent)
+			, throw_outside = function(ex) {
+				(view.setImmediate || view.setTimeout)(function() {
+					throw ex;
+				}, 0);
+			}
+			, force_saveable_type = "application/octet-stream"
+			// the Blob API is fundamentally broken as there is no "downloadfinished" event to subscribe to
+			, arbitrary_revoke_timeout = 1000 * 40 // in ms
+			, revoke = function(file) {
+				var revoker = function() {
+					if (typeof file === "string") { // file is an object URL
+						get_URL().revokeObjectURL(file);
+					} else { // file is a File
+						file.remove();
+					}
+				};
+				setTimeout(revoker, arbitrary_revoke_timeout);
+			}
+			, dispatch = function(filesaver, event_types, event) {
+				event_types = [].concat(event_types);
+				var i = event_types.length;
+				while (i--) {
+					var listener = filesaver["on" + event_types[i]];
+					if (typeof listener === "function") {
+						try {
+							listener.call(filesaver, event || filesaver);
+						} catch (ex) {
+							throw_outside(ex);
+						}
+					}
+				}
+			}
+			, auto_bom = function(blob) {
+				// prepend BOM for UTF-8 XML and text/* types (including HTML)
+				// note: your browser will automatically convert UTF-16 U+FEFF to EF BB BF
+				if (/^\s*(?:text\/\S*|application\/xml|\S*\/\S*\+xml)\s*;.*charset\s*=\s*utf-8/i.test(blob.type)) {
+					return new Blob([String.fromCharCode(0xFEFF), blob], {type: blob.type});
+				}
+				return blob;
+			}
+			, FileSaver = function(blob, name, no_auto_bom) {
+				if (!no_auto_bom) {
+					blob = auto_bom(blob);
+				}
+				// First try a.download, then web filesystem, then object URLs
+				var
+					  filesaver = this
+					, type = blob.type
+					, force = type === force_saveable_type
+					, object_url
+					, dispatch_all = function() {
+						dispatch(filesaver, "writestart progress write writeend".split(" "));
+					}
+					// on any filesys errors revert to saving with object URLs
+					, fs_error = function() {
+						if ((is_chrome_ios || (force && is_safari)) && view.FileReader) {
+							// Safari doesn't allow downloading of blob urls
+							var reader = new FileReader();
+							reader.onloadend = function() {
+								var url = is_chrome_ios ? reader.result : reader.result.replace(/^data:[^;]*;/, 'data:attachment/file;');
+								var popup = view.open(url, '_blank');
+								if(!popup) view.location.href = url;
+								url=undefined; // release reference before dispatching
+								filesaver.readyState = filesaver.DONE;
+								dispatch_all();
+							};
+							reader.readAsDataURL(blob);
+							filesaver.readyState = filesaver.INIT;
+							return;
+						}
+						// don't create more object URLs than needed
+						if (!object_url) {
+							object_url = get_URL().createObjectURL(blob);
+						}
+						if (force) {
+							view.location.href = object_url;
+						} else {
+							var opened = view.open(object_url, "_blank");
+							if (!opened) {
+								// Apple does not allow window.open, see https://developer.apple.com/library/safari/documentation/Tools/Conceptual/SafariExtensionGuide/WorkingwithWindowsandTabs/WorkingwithWindowsandTabs.html
+								view.location.href = object_url;
+							}
+						}
+						filesaver.readyState = filesaver.DONE;
+						dispatch_all();
+						revoke(object_url);
+					}
+				;
+				filesaver.readyState = filesaver.INIT;
+
+				if (can_use_save_link) {
+					object_url = get_URL().createObjectURL(blob);
+					setTimeout(function() {
+						save_link.href = object_url;
+						save_link.download = name;
+						click(save_link);
+						dispatch_all();
+						revoke(object_url);
+						filesaver.readyState = filesaver.DONE;
+					});
+					return;
+				}
+
+				fs_error();
+			}
+			, FS_proto = FileSaver.prototype
+			, saveAs = function(blob, name, no_auto_bom) {
+				return new FileSaver(blob, name || blob.name || "download", no_auto_bom);
+			}
+		;
+		// IE 10+ (native saveAs)
+		if (typeof navigator !== "undefined" && navigator.msSaveOrOpenBlob) {
+			return function(blob, name, no_auto_bom) {
+				name = name || blob.name || "download";
+
+				if (!no_auto_bom) {
+					blob = auto_bom(blob);
+				}
+				return navigator.msSaveOrOpenBlob(blob, name);
+			};
+		}
+
+		FS_proto.abort = function(){};
+		FS_proto.readyState = FS_proto.INIT = 0;
+		FS_proto.WRITING = 1;
+		FS_proto.DONE = 2;
+
+		FS_proto.error =
+		FS_proto.onwritestart =
+		FS_proto.onprogress =
+		FS_proto.onwrite =
+		FS_proto.onabort =
+		FS_proto.onerror =
+		FS_proto.onwriteend =
+			null;
+
+		return saveAs;
+	}(
+		   typeof self !== "undefined" && self
+		|| typeof window !== "undefined" && window
+		|| this.content
+	));
+	// `self` is undefined in Firefox for Android content script context
+	// while `this` is nsIContentFrameMessageManager
+	// with an attribute `content` that corresponds to the window
+
+	if (typeof module !== "undefined" && module.exports) {
+	  module.exports.saveAs = saveAs;
+	} else if (("function" !== "undefined" && __webpack_require__(17) !== null) && (__webpack_require__(18) !== null)) {
+	  !(__WEBPACK_AMD_DEFINE_ARRAY__ = [], __WEBPACK_AMD_DEFINE_RESULT__ = function() {
+	    return saveAs;
+	  }.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
+	}
+
+
+/***/ },
+/* 17 */
+/***/ function(module, exports) {
+
+	module.exports = function() { throw new Error("define cannot be used indirect"); };
+
+
+/***/ },
+/* 18 */
+/***/ function(module, exports) {
+
+	/* WEBPACK VAR INJECTION */(function(__webpack_amd_options__) {module.exports = __webpack_amd_options__;
+
+	/* WEBPACK VAR INJECTION */}.call(exports, {}))
+
+/***/ },
+/* 19 */
+/***/ function(module, exports) {
+
+	module.exports = "\n  <tr>\n    <td>\n        {{document.id}}\n    </td>\n    <td class=\"col-md-6\">\n        <input v-if=\"document.editing\" v-model=\"document.title\" class=\"form-control\">\n        </input>\n        <!--in other occasions show the story plot-->\n            <span v-else>\n                {{document.title}}\n            </span>\n    </td>\n    <td>\n        <input v-if=\"document.editing\" v-model=\"document.author\" class=\"form-control\">\n        </input>\n        <!--in other occasions show the story writer-->\n            <span v-else>\n                {{document.author}}\n            </span>\n    </td>\n    <td>\n        <input v-if=\"document.editing\" v-model=\"document.text\" class=\"form-control\">\n        </input>\n        <!--in other occasions show the story writer-->\n            <span v-else>\n                {{document.text}}\n            </span>\n    </td>\n    <td>   \n      <div class=\"btn-group\" v-if=\"!document.editing\">\n          <button @click=\"editDocument(document)\" class=\"btn btn-default\">Edit</button>\n          <button @click=\"deleteDocument(document)\" class=\"btn btn-danger\">Delete</button>\n          <button @click=\"downloadDocument(document)\" class=\"btn btn-default\">Download</button>\n      </div>\n      <div class=\"btn-group\" v-else>\n          <!--If the document is taken from the db then it will have an id-->\n          <button v-if=\"document.id\" class=\"btn btn-primary\" @click=\"updateDocument(document)\">Update Document\n          </button>\n          <!--If the document is new we want to store it-->\n          <button v-else class=\"btn btn-success\" @click=\"storeDocument(document)\">Save New Document</button>\n          <!--Always show cancel-->\n          <button @click=\"document.editing=false\" class=\"btn btn-default\">Cancel</button>\n      </div>\n    </td>\n  </tr>\n";
+
+/***/ },
+/* 20 */
+/***/ function(module, exports) {
+
+	module.exports = "\n  <div class=\"doclist-grp\" v-if=\"$parent.docList\">\n    <table class=\"table table-striped\">\n      <tr>\n          <th>Id</th>\n          <th>Title</th>\n          <th>Author</th>\n          <th>Text</th>\n      </tr>\n      <tr v-for=\"document in $parent.documents\" is=\"document\" :document=\"document\"></tr>\n      <p>\n        <h2>Here's a list of all your documents.</h2>\n         <label for=\"file\">Add a document</label>\n        <input type=\"file\" name=\"file\" @change=\"$parent.onFileChange\">\n      </p>\n    </table>\n  </div>   \n";
+
+/***/ },
+/* 21 */
+/***/ function(module, exports, __webpack_require__) {
+
+	module.exports = __webpack_require__(22);
+
+
+/***/ },
+/* 22 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -10537,11 +11079,11 @@
 	});
 	exports.default = createApplication;
 
-	var _feathers = __webpack_require__(5);
+	var _feathers = __webpack_require__(23);
 
 	var _feathers2 = _interopRequireDefault(_feathers);
 
-	var _express = __webpack_require__(22);
+	var _express = __webpack_require__(40);
 
 	var _express2 = _interopRequireDefault(_express);
 
@@ -10555,7 +11097,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 5 */
+/* 23 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -10565,11 +11107,11 @@
 	});
 	exports.default = createApplication;
 
-	var _uberproto = __webpack_require__(6);
+	var _uberproto = __webpack_require__(24);
 
 	var _uberproto2 = _interopRequireDefault(_uberproto);
 
-	var _application = __webpack_require__(7);
+	var _application = __webpack_require__(25);
 
 	var _application2 = _interopRequireDefault(_application);
 
@@ -10589,7 +11131,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 6 */
+/* 24 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/* global define */
@@ -10737,7 +11279,7 @@
 
 
 /***/ },
-/* 7 */
+/* 25 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -10746,17 +11288,17 @@
 	  value: true
 	});
 
-	var _debug = __webpack_require__(8);
+	var _debug = __webpack_require__(26);
 
 	var _debug2 = _interopRequireDefault(_debug);
 
-	var _feathersCommons = __webpack_require__(11);
+	var _feathersCommons = __webpack_require__(29);
 
-	var _uberproto = __webpack_require__(6);
+	var _uberproto = __webpack_require__(24);
 
 	var _uberproto2 = _interopRequireDefault(_uberproto);
 
-	var _index = __webpack_require__(15);
+	var _index = __webpack_require__(33);
 
 	var _index2 = _interopRequireDefault(_index);
 
@@ -10893,7 +11435,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 8 */
+/* 26 */
 /***/ function(module, exports, __webpack_require__) {
 
 	
@@ -10903,7 +11445,7 @@
 	 * Expose `debug()` as the module.
 	 */
 
-	exports = module.exports = __webpack_require__(9);
+	exports = module.exports = __webpack_require__(27);
 	exports.log = log;
 	exports.formatArgs = formatArgs;
 	exports.save = save;
@@ -11067,7 +11609,7 @@
 
 
 /***/ },
-/* 9 */
+/* 27 */
 /***/ function(module, exports, __webpack_require__) {
 
 	
@@ -11083,7 +11625,7 @@
 	exports.disable = disable;
 	exports.enable = enable;
 	exports.enabled = enabled;
-	exports.humanize = __webpack_require__(10);
+	exports.humanize = __webpack_require__(28);
 
 	/**
 	 * The currently active debug mode names, and names to skip.
@@ -11270,7 +11812,7 @@
 
 
 /***/ },
-/* 10 */
+/* 28 */
 /***/ function(module, exports) {
 
 	/**
@@ -11401,7 +11943,7 @@
 
 
 /***/ },
-/* 11 */
+/* 29 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -11410,13 +11952,13 @@
 	  value: true
 	});
 
-	var _arguments = __webpack_require__(12);
+	var _arguments = __webpack_require__(30);
 
 	var _arguments2 = _interopRequireDefault(_arguments);
 
-	var _utils = __webpack_require__(13);
+	var _utils = __webpack_require__(31);
 
-	var _hooks = __webpack_require__(14);
+	var _hooks = __webpack_require__(32);
 
 	var _hooks2 = _interopRequireDefault(_hooks);
 
@@ -11433,7 +11975,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 12 */
+/* 30 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -11537,7 +12079,7 @@
 	}
 
 /***/ },
-/* 13 */
+/* 31 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -11691,14 +12233,14 @@
 	}
 
 /***/ },
-/* 14 */
+/* 32 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
 	var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol ? "symbol" : typeof obj; };
 
-	var _utils = __webpack_require__(13);
+	var _utils = __webpack_require__(31);
 
 	function getOrRemove(args) {
 	  return {
@@ -11799,7 +12341,7 @@
 	};
 
 /***/ },
-/* 15 */
+/* 33 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -11809,7 +12351,7 @@
 	});
 
 	exports.default = function () {
-	  var mixins = [__webpack_require__(16), __webpack_require__(17), __webpack_require__(21)];
+	  var mixins = [__webpack_require__(34), __webpack_require__(35), __webpack_require__(39)];
 
 	  // Override push to make sure that normalize is always the last
 	  mixins.push = function () {
@@ -11824,7 +12366,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 16 */
+/* 34 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -11872,7 +12414,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 17 */
+/* 35 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -11927,13 +12469,13 @@
 	  });
 	};
 
-	var _rubberduck = __webpack_require__(18);
+	var _rubberduck = __webpack_require__(36);
 
 	var _rubberduck2 = _interopRequireDefault(_rubberduck);
 
-	var _events = __webpack_require__(19);
+	var _events = __webpack_require__(37);
 
-	var _feathersCommons = __webpack_require__(11);
+	var _feathersCommons = __webpack_require__(29);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -11952,11 +12494,11 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 18 */
+/* 36 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var events = __webpack_require__(19);
-	var utils = __webpack_require__(20);
+	var events = __webpack_require__(37);
+	var utils = __webpack_require__(38);
 	var wrap = exports.wrap = {
 	  /**
 	   * Wrap an anonymous or named function to notify an Emitter and
@@ -12068,7 +12610,7 @@
 
 
 /***/ },
-/* 19 */
+/* 37 */
 /***/ function(module, exports) {
 
 	// Copyright Joyent, Inc. and other Node contributors.
@@ -12376,7 +12918,7 @@
 
 
 /***/ },
-/* 20 */
+/* 38 */
 /***/ function(module, exports) {
 
 	exports.toBase26 = function(num) {
@@ -12416,7 +12958,7 @@
 
 
 /***/ },
-/* 21 */
+/* 39 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -12445,12 +12987,12 @@
 	  }
 	};
 
-	var _feathersCommons = __webpack_require__(11);
+	var _feathersCommons = __webpack_require__(29);
 
 	module.exports = exports['default'];
 
 /***/ },
-/* 22 */
+/* 40 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -12497,9 +13039,9 @@
 	  return app;
 	};
 
-	var _events = __webpack_require__(19);
+	var _events = __webpack_require__(37);
 
-	var _uberproto = __webpack_require__(6);
+	var _uberproto = __webpack_require__(24);
 
 	var _uberproto2 = _interopRequireDefault(_uberproto);
 
@@ -12508,7 +13050,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 23 */
+/* 41 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -12517,13 +13059,13 @@
 	  value: true
 	});
 
-	var _feathersCommons = __webpack_require__(11);
+	var _feathersCommons = __webpack_require__(29);
 
-	var _bundled = __webpack_require__(24);
+	var _bundled = __webpack_require__(42);
 
 	var hooks = _interopRequireWildcard(_bundled);
 
-	var _commons = __webpack_require__(26);
+	var _commons = __webpack_require__(44);
 
 	function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
 
@@ -12637,7 +13179,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 24 */
+/* 42 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -12655,7 +13197,7 @@
 	exports.pluck = pluck;
 	exports.disable = disable;
 	exports.populate = populate;
-	var errors = __webpack_require__(25).errors;
+	var errors = __webpack_require__(43).errors;
 
 	function lowerCase() {
 	  for (var _len = arguments.length, fields = Array(_len), _key = 0; _key < _len; _key++) {
@@ -13112,7 +13654,7 @@
 	}
 
 /***/ },
-/* 25 */
+/* 43 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -13158,7 +13700,7 @@
 	  return ExtendableBuiltin;
 	}
 
-	var debug = __webpack_require__(8)('feathers-errors');
+	var debug = __webpack_require__(26)('feathers-errors');
 
 	// NOTE (EK): Babel doesn't properly support extending
 	// some classes in ES6. The Error class being one of them.
@@ -13457,7 +13999,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 26 */
+/* 44 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -13472,7 +14014,7 @@
 	exports.processHooks = processHooks;
 	exports.addHookMethod = addHookMethod;
 
-	var _feathersCommons = __webpack_require__(11);
+	var _feathersCommons = __webpack_require__(29);
 
 	function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
@@ -13564,14 +14106,14 @@
 	}
 
 /***/ },
-/* 27 */
+/* 45 */
 /***/ function(module, exports, __webpack_require__) {
 
-	module.exports = __webpack_require__(28);
+	module.exports = __webpack_require__(46);
 
 
 /***/ },
-/* 28 */
+/* 46 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -13681,15 +14223,15 @@
 	  };
 	};
 
-	var _feathersErrors = __webpack_require__(25);
+	var _feathersErrors = __webpack_require__(43);
 
 	var _feathersErrors2 = _interopRequireDefault(_feathersErrors);
 
-	var _hooks = __webpack_require__(29);
+	var _hooks = __webpack_require__(47);
 
 	var hooks = _interopRequireWildcard(_hooks);
 
-	var _utils = __webpack_require__(30);
+	var _utils = __webpack_require__(48);
 
 	function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
 
@@ -13705,7 +14247,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 29 */
+/* 47 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -13740,7 +14282,7 @@
 	}
 
 /***/ },
-/* 30 */
+/* 48 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -13866,14 +14408,14 @@
 	}
 
 /***/ },
-/* 31 */
+/* 49 */
 /***/ function(module, exports, __webpack_require__) {
 
-	module.exports = __webpack_require__(32);
+	module.exports = __webpack_require__(50);
 
 
 /***/ },
-/* 32 */
+/* 50 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -13914,7 +14456,7 @@
 	  return initialize;
 	};
 
-	var _client = __webpack_require__(33);
+	var _client = __webpack_require__(51);
 
 	var _client2 = _interopRequireDefault(_client);
 
@@ -13923,14 +14465,14 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 33 */
+/* 51 */
 /***/ function(module, exports, __webpack_require__) {
 
-	module.exports = __webpack_require__(34);
+	module.exports = __webpack_require__(52);
 
 
 /***/ },
-/* 34 */
+/* 52 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -13941,13 +14483,13 @@
 
 	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-	var _utils = __webpack_require__(35);
+	var _utils = __webpack_require__(53);
 
-	var _feathersErrors = __webpack_require__(25);
+	var _feathersErrors = __webpack_require__(43);
 
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-	var debug = __webpack_require__(8)('feathers-socket-commons:client');
+	var debug = __webpack_require__(26)('feathers-socket-commons:client');
 	var namespacedEmitterMethods = ['addListener', 'emit', 'listenerCount', 'listeners', 'on', 'once', 'prependListener', 'prependOnceListener', 'removeAllListeners', 'removeListener'];
 	var otherEmitterMethods = ['eventNames', 'getMaxListeners', 'setMaxListeners'];
 
@@ -14103,7 +14645,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 35 */
+/* 53 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {'use strict';
@@ -14116,7 +14658,7 @@
 	exports.promisify = promisify;
 	exports.normalizeError = normalizeError;
 
-	var _feathersCommons = __webpack_require__(11);
+	var _feathersCommons = __webpack_require__(29);
 
 	var eventMappings = exports.eventMappings = {
 	  create: 'created',
@@ -14167,7 +14709,7 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(2)))
 
 /***/ },
-/* 36 */
+/* 54 */
 /***/ function(module, exports, __webpack_require__) {
 
 	
@@ -14175,10 +14717,10 @@
 	 * Module dependencies.
 	 */
 
-	var url = __webpack_require__(37);
-	var parser = __webpack_require__(39);
-	var Manager = __webpack_require__(47);
-	var debug = __webpack_require__(8)('socket.io-client');
+	var url = __webpack_require__(55);
+	var parser = __webpack_require__(57);
+	var Manager = __webpack_require__(64);
+	var debug = __webpack_require__(26)('socket.io-client');
 
 	/**
 	 * Module exports.
@@ -14260,12 +14802,12 @@
 	 * @api public
 	 */
 
-	exports.Manager = __webpack_require__(47);
-	exports.Socket = __webpack_require__(73);
+	exports.Manager = __webpack_require__(64);
+	exports.Socket = __webpack_require__(90);
 
 
 /***/ },
-/* 37 */
+/* 55 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(global) {
@@ -14273,8 +14815,8 @@
 	 * Module dependencies.
 	 */
 
-	var parseuri = __webpack_require__(38);
-	var debug = __webpack_require__(8)('socket.io-client:url');
+	var parseuri = __webpack_require__(56);
+	var debug = __webpack_require__(26)('socket.io-client:url');
 
 	/**
 	 * Module exports.
@@ -14348,7 +14890,7 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, (function() { return this; }())))
 
 /***/ },
-/* 38 */
+/* 56 */
 /***/ function(module, exports) {
 
 	/**
@@ -14393,7 +14935,7 @@
 
 
 /***/ },
-/* 39 */
+/* 57 */
 /***/ function(module, exports, __webpack_require__) {
 
 	
@@ -14401,12 +14943,12 @@
 	 * Module dependencies.
 	 */
 
-	var debug = __webpack_require__(8)('socket.io-parser');
-	var json = __webpack_require__(40);
-	var isArray = __webpack_require__(43);
-	var Emitter = __webpack_require__(44);
-	var binary = __webpack_require__(45);
-	var isBuf = __webpack_require__(46);
+	var debug = __webpack_require__(26)('socket.io-parser');
+	var json = __webpack_require__(58);
+	var isArray = __webpack_require__(60);
+	var Emitter = __webpack_require__(61);
+	var binary = __webpack_require__(62);
+	var isBuf = __webpack_require__(63);
 
 	/**
 	 * Protocol version.
@@ -14799,14 +15341,14 @@
 
 
 /***/ },
-/* 40 */
+/* 58 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_RESULT__;/* WEBPACK VAR INJECTION */(function(module, global) {/*! JSON v3.3.2 | http://bestiejs.github.io/json3 | Copyright 2012-2014, Kit Cambridge | http://kit.mit-license.org */
 	;(function () {
 	  // Detect the `define` function exposed by asynchronous module loaders. The
 	  // strict `define` check is necessary for compatibility with `r.js`.
-	  var isLoader = "function" === "function" && __webpack_require__(42);
+	  var isLoader = "function" === "function" && __webpack_require__(18);
 
 	  // A set of types used to distinguish objects from primitives.
 	  var objectTypes = {
@@ -15705,10 +16247,10 @@
 	  }
 	}).call(this);
 
-	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(41)(module), (function() { return this; }())))
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(59)(module), (function() { return this; }())))
 
 /***/ },
-/* 41 */
+/* 59 */
 /***/ function(module, exports) {
 
 	module.exports = function(module) {
@@ -15724,15 +16266,7 @@
 
 
 /***/ },
-/* 42 */
-/***/ function(module, exports) {
-
-	/* WEBPACK VAR INJECTION */(function(__webpack_amd_options__) {module.exports = __webpack_amd_options__;
-
-	/* WEBPACK VAR INJECTION */}.call(exports, {}))
-
-/***/ },
-/* 43 */
+/* 60 */
 /***/ function(module, exports) {
 
 	module.exports = Array.isArray || function (arr) {
@@ -15741,7 +16275,7 @@
 
 
 /***/ },
-/* 44 */
+/* 61 */
 /***/ function(module, exports) {
 
 	
@@ -15911,7 +16445,7 @@
 
 
 /***/ },
-/* 45 */
+/* 62 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(global) {/*global Blob,File*/
@@ -15920,8 +16454,8 @@
 	 * Module requirements
 	 */
 
-	var isArray = __webpack_require__(43);
-	var isBuf = __webpack_require__(46);
+	var isArray = __webpack_require__(60);
+	var isBuf = __webpack_require__(63);
 
 	/**
 	 * Replaces every Buffer | ArrayBuffer in packet with a numbered placeholder.
@@ -16059,7 +16593,7 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, (function() { return this; }())))
 
 /***/ },
-/* 46 */
+/* 63 */
 /***/ function(module, exports) {
 
 	/* WEBPACK VAR INJECTION */(function(global) {
@@ -16079,7 +16613,7 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, (function() { return this; }())))
 
 /***/ },
-/* 47 */
+/* 64 */
 /***/ function(module, exports, __webpack_require__) {
 
 	
@@ -16087,15 +16621,15 @@
 	 * Module dependencies.
 	 */
 
-	var eio = __webpack_require__(48);
-	var Socket = __webpack_require__(73);
-	var Emitter = __webpack_require__(74);
-	var parser = __webpack_require__(39);
-	var on = __webpack_require__(76);
-	var bind = __webpack_require__(77);
-	var debug = __webpack_require__(8)('socket.io-client:manager');
-	var indexOf = __webpack_require__(71);
-	var Backoff = __webpack_require__(79);
+	var eio = __webpack_require__(65);
+	var Socket = __webpack_require__(90);
+	var Emitter = __webpack_require__(91);
+	var parser = __webpack_require__(57);
+	var on = __webpack_require__(93);
+	var bind = __webpack_require__(94);
+	var debug = __webpack_require__(26)('socket.io-client:manager');
+	var indexOf = __webpack_require__(88);
+	var Backoff = __webpack_require__(96);
 
 	/**
 	 * IE6+ hasOwnProperty
@@ -16642,19 +17176,19 @@
 
 
 /***/ },
-/* 48 */
+/* 65 */
 /***/ function(module, exports, __webpack_require__) {
 
 	
-	module.exports =  __webpack_require__(49);
+	module.exports =  __webpack_require__(66);
 
 
 /***/ },
-/* 49 */
+/* 66 */
 /***/ function(module, exports, __webpack_require__) {
 
 	
-	module.exports = __webpack_require__(50);
+	module.exports = __webpack_require__(67);
 
 	/**
 	 * Exports parser
@@ -16662,25 +17196,25 @@
 	 * @api public
 	 *
 	 */
-	module.exports.parser = __webpack_require__(57);
+	module.exports.parser = __webpack_require__(74);
 
 
 /***/ },
-/* 50 */
+/* 67 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(global) {/**
 	 * Module dependencies.
 	 */
 
-	var transports = __webpack_require__(51);
-	var Emitter = __webpack_require__(44);
-	var debug = __webpack_require__(8)('engine.io-client:socket');
-	var index = __webpack_require__(71);
-	var parser = __webpack_require__(57);
-	var parseuri = __webpack_require__(38);
-	var parsejson = __webpack_require__(72);
-	var parseqs = __webpack_require__(65);
+	var transports = __webpack_require__(68);
+	var Emitter = __webpack_require__(61);
+	var debug = __webpack_require__(26)('engine.io-client:socket');
+	var index = __webpack_require__(88);
+	var parser = __webpack_require__(74);
+	var parseuri = __webpack_require__(56);
+	var parsejson = __webpack_require__(89);
+	var parseqs = __webpack_require__(82);
 
 	/**
 	 * Module exports.
@@ -16804,9 +17338,9 @@
 	 */
 
 	Socket.Socket = Socket;
-	Socket.Transport = __webpack_require__(56);
-	Socket.transports = __webpack_require__(51);
-	Socket.parser = __webpack_require__(57);
+	Socket.Transport = __webpack_require__(73);
+	Socket.transports = __webpack_require__(68);
+	Socket.parser = __webpack_require__(74);
 
 	/**
 	 * Creates transport of the given type.
@@ -17401,17 +17935,17 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, (function() { return this; }())))
 
 /***/ },
-/* 51 */
+/* 68 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(global) {/**
 	 * Module dependencies
 	 */
 
-	var XMLHttpRequest = __webpack_require__(52);
-	var XHR = __webpack_require__(54);
-	var JSONP = __webpack_require__(68);
-	var websocket = __webpack_require__(69);
+	var XMLHttpRequest = __webpack_require__(69);
+	var XHR = __webpack_require__(71);
+	var JSONP = __webpack_require__(85);
+	var websocket = __webpack_require__(86);
 
 	/**
 	 * Export transports.
@@ -17461,11 +17995,11 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, (function() { return this; }())))
 
 /***/ },
-/* 52 */
+/* 69 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// browser shim for xmlhttprequest module
-	var hasCORS = __webpack_require__(53);
+	var hasCORS = __webpack_require__(70);
 
 	module.exports = function(opts) {
 	  var xdomain = opts.xdomain;
@@ -17503,7 +18037,7 @@
 
 
 /***/ },
-/* 53 */
+/* 70 */
 /***/ function(module, exports) {
 
 	
@@ -17526,18 +18060,18 @@
 
 
 /***/ },
-/* 54 */
+/* 71 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(global) {/**
 	 * Module requirements.
 	 */
 
-	var XMLHttpRequest = __webpack_require__(52);
-	var Polling = __webpack_require__(55);
-	var Emitter = __webpack_require__(44);
-	var inherit = __webpack_require__(66);
-	var debug = __webpack_require__(8)('engine.io-client:polling-xhr');
+	var XMLHttpRequest = __webpack_require__(69);
+	var Polling = __webpack_require__(72);
+	var Emitter = __webpack_require__(61);
+	var inherit = __webpack_require__(83);
+	var debug = __webpack_require__(26)('engine.io-client:polling-xhr');
 
 	/**
 	 * Module exports.
@@ -17945,19 +18479,19 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, (function() { return this; }())))
 
 /***/ },
-/* 55 */
+/* 72 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
 	 * Module dependencies.
 	 */
 
-	var Transport = __webpack_require__(56);
-	var parseqs = __webpack_require__(65);
-	var parser = __webpack_require__(57);
-	var inherit = __webpack_require__(66);
-	var yeast = __webpack_require__(67);
-	var debug = __webpack_require__(8)('engine.io-client:polling');
+	var Transport = __webpack_require__(73);
+	var parseqs = __webpack_require__(82);
+	var parser = __webpack_require__(74);
+	var inherit = __webpack_require__(83);
+	var yeast = __webpack_require__(84);
+	var debug = __webpack_require__(26)('engine.io-client:polling');
 
 	/**
 	 * Module exports.
@@ -17970,7 +18504,7 @@
 	 */
 
 	var hasXHR2 = (function() {
-	  var XMLHttpRequest = __webpack_require__(52);
+	  var XMLHttpRequest = __webpack_require__(69);
 	  var xhr = new XMLHttpRequest({ xdomain: false });
 	  return null != xhr.responseType;
 	})();
@@ -18198,15 +18732,15 @@
 
 
 /***/ },
-/* 56 */
+/* 73 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
 	 * Module dependencies.
 	 */
 
-	var parser = __webpack_require__(57);
-	var Emitter = __webpack_require__(44);
+	var parser = __webpack_require__(74);
+	var Emitter = __webpack_require__(61);
 
 	/**
 	 * Module exports.
@@ -18359,19 +18893,19 @@
 
 
 /***/ },
-/* 57 */
+/* 74 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(global) {/**
 	 * Module dependencies.
 	 */
 
-	var keys = __webpack_require__(58);
-	var hasBinary = __webpack_require__(59);
-	var sliceBuffer = __webpack_require__(60);
-	var base64encoder = __webpack_require__(61);
-	var after = __webpack_require__(62);
-	var utf8 = __webpack_require__(63);
+	var keys = __webpack_require__(75);
+	var hasBinary = __webpack_require__(76);
+	var sliceBuffer = __webpack_require__(77);
+	var base64encoder = __webpack_require__(78);
+	var after = __webpack_require__(79);
+	var utf8 = __webpack_require__(80);
 
 	/**
 	 * Check if we are running an android browser. That requires us to use
@@ -18428,7 +18962,7 @@
 	 * Create a blob api even for blob builder when vendor prefixes exist
 	 */
 
-	var Blob = __webpack_require__(64);
+	var Blob = __webpack_require__(81);
 
 	/**
 	 * Encodes a packet.
@@ -18960,7 +19494,7 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, (function() { return this; }())))
 
 /***/ },
-/* 58 */
+/* 75 */
 /***/ function(module, exports) {
 
 	
@@ -18985,7 +19519,7 @@
 
 
 /***/ },
-/* 59 */
+/* 76 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(global) {
@@ -18993,7 +19527,7 @@
 	 * Module requirements.
 	 */
 
-	var isArray = __webpack_require__(43);
+	var isArray = __webpack_require__(60);
 
 	/**
 	 * Module exports.
@@ -19050,7 +19584,7 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, (function() { return this; }())))
 
 /***/ },
-/* 60 */
+/* 77 */
 /***/ function(module, exports) {
 
 	/**
@@ -19085,7 +19619,7 @@
 
 
 /***/ },
-/* 61 */
+/* 78 */
 /***/ function(module, exports) {
 
 	/*
@@ -19150,7 +19684,7 @@
 
 
 /***/ },
-/* 62 */
+/* 79 */
 /***/ function(module, exports) {
 
 	module.exports = after
@@ -19184,7 +19718,7 @@
 
 
 /***/ },
-/* 63 */
+/* 80 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_RESULT__;/* WEBPACK VAR INJECTION */(function(module, global) {/*! https://mths.be/utf8js v2.0.0 by @mathias */
@@ -19430,10 +19964,10 @@
 
 	}(this));
 
-	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(41)(module), (function() { return this; }())))
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(59)(module), (function() { return this; }())))
 
 /***/ },
-/* 64 */
+/* 81 */
 /***/ function(module, exports) {
 
 	/* WEBPACK VAR INJECTION */(function(global) {/**
@@ -19536,7 +20070,7 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, (function() { return this; }())))
 
 /***/ },
-/* 65 */
+/* 82 */
 /***/ function(module, exports) {
 
 	/**
@@ -19579,7 +20113,7 @@
 
 
 /***/ },
-/* 66 */
+/* 83 */
 /***/ function(module, exports) {
 
 	
@@ -19591,7 +20125,7 @@
 	};
 
 /***/ },
-/* 67 */
+/* 84 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -19665,7 +20199,7 @@
 
 
 /***/ },
-/* 68 */
+/* 85 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(global) {
@@ -19673,8 +20207,8 @@
 	 * Module requirements.
 	 */
 
-	var Polling = __webpack_require__(55);
-	var inherit = __webpack_require__(66);
+	var Polling = __webpack_require__(72);
+	var inherit = __webpack_require__(83);
 
 	/**
 	 * Module exports.
@@ -19910,19 +20444,19 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, (function() { return this; }())))
 
 /***/ },
-/* 69 */
+/* 86 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(global) {/**
 	 * Module dependencies.
 	 */
 
-	var Transport = __webpack_require__(56);
-	var parser = __webpack_require__(57);
-	var parseqs = __webpack_require__(65);
-	var inherit = __webpack_require__(66);
-	var yeast = __webpack_require__(67);
-	var debug = __webpack_require__(8)('engine.io-client:websocket');
+	var Transport = __webpack_require__(73);
+	var parser = __webpack_require__(74);
+	var parseqs = __webpack_require__(82);
+	var inherit = __webpack_require__(83);
+	var yeast = __webpack_require__(84);
+	var debug = __webpack_require__(26)('engine.io-client:websocket');
 	var BrowserWebSocket = global.WebSocket || global.MozWebSocket;
 
 	/**
@@ -19934,7 +20468,7 @@
 	var WebSocket = BrowserWebSocket;
 	if (!WebSocket && typeof window === 'undefined') {
 	  try {
-	    WebSocket = __webpack_require__(70);
+	    WebSocket = __webpack_require__(87);
 	  } catch (e) { }
 	}
 
@@ -20205,13 +20739,13 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, (function() { return this; }())))
 
 /***/ },
-/* 70 */
+/* 87 */
 /***/ function(module, exports) {
 
 	/* (ignored) */
 
 /***/ },
-/* 71 */
+/* 88 */
 /***/ function(module, exports) {
 
 	
@@ -20226,7 +20760,7 @@
 	};
 
 /***/ },
-/* 72 */
+/* 89 */
 /***/ function(module, exports) {
 
 	/* WEBPACK VAR INJECTION */(function(global) {/**
@@ -20264,7 +20798,7 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, (function() { return this; }())))
 
 /***/ },
-/* 73 */
+/* 90 */
 /***/ function(module, exports, __webpack_require__) {
 
 	
@@ -20272,13 +20806,13 @@
 	 * Module dependencies.
 	 */
 
-	var parser = __webpack_require__(39);
-	var Emitter = __webpack_require__(74);
-	var toArray = __webpack_require__(75);
-	var on = __webpack_require__(76);
-	var bind = __webpack_require__(77);
-	var debug = __webpack_require__(8)('socket.io-client:socket');
-	var hasBin = __webpack_require__(78);
+	var parser = __webpack_require__(57);
+	var Emitter = __webpack_require__(91);
+	var toArray = __webpack_require__(92);
+	var on = __webpack_require__(93);
+	var bind = __webpack_require__(94);
+	var debug = __webpack_require__(26)('socket.io-client:socket');
+	var hasBin = __webpack_require__(95);
 
 	/**
 	 * Module exports.
@@ -20682,7 +21216,7 @@
 
 
 /***/ },
-/* 74 */
+/* 91 */
 /***/ function(module, exports) {
 
 	
@@ -20849,7 +21383,7 @@
 
 
 /***/ },
-/* 75 */
+/* 92 */
 /***/ function(module, exports) {
 
 	module.exports = toArray
@@ -20868,7 +21402,7 @@
 
 
 /***/ },
-/* 76 */
+/* 93 */
 /***/ function(module, exports) {
 
 	
@@ -20898,7 +21432,7 @@
 
 
 /***/ },
-/* 77 */
+/* 94 */
 /***/ function(module, exports) {
 
 	/**
@@ -20927,7 +21461,7 @@
 
 
 /***/ },
-/* 78 */
+/* 95 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(global) {
@@ -20935,7 +21469,7 @@
 	 * Module requirements.
 	 */
 
-	var isArray = __webpack_require__(43);
+	var isArray = __webpack_require__(60);
 
 	/**
 	 * Module exports.
@@ -20993,7 +21527,7 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, (function() { return this; }())))
 
 /***/ },
-/* 79 */
+/* 96 */
 /***/ function(module, exports) {
 
 	
@@ -21081,207 +21615,6 @@
 	  this.jitter = jitter;
 	};
 
-
-
-/***/ },
-/* 80 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/* FileSaver.js
-	 * A saveAs() FileSaver implementation.
-	 * 1.3.2
-	 * 2016-06-16 18:25:19
-	 *
-	 * By Eli Grey, http://eligrey.com
-	 * License: MIT
-	 *   See https://github.com/eligrey/FileSaver.js/blob/master/LICENSE.md
-	 */
-
-	/*global self */
-	/*jslint bitwise: true, indent: 4, laxbreak: true, laxcomma: true, smarttabs: true, plusplus: true */
-
-	/*! @source http://purl.eligrey.com/github/FileSaver.js/blob/master/FileSaver.js */
-
-	var saveAs = saveAs || (function(view) {
-		"use strict";
-		// IE <10 is explicitly unsupported
-		if (typeof view === "undefined" || typeof navigator !== "undefined" && /MSIE [1-9]\./.test(navigator.userAgent)) {
-			return;
-		}
-		var
-			  doc = view.document
-			  // only get URL when necessary in case Blob.js hasn't overridden it yet
-			, get_URL = function() {
-				return view.URL || view.webkitURL || view;
-			}
-			, save_link = doc.createElementNS("http://www.w3.org/1999/xhtml", "a")
-			, can_use_save_link = "download" in save_link
-			, click = function(node) {
-				var event = new MouseEvent("click");
-				node.dispatchEvent(event);
-			}
-			, is_safari = /constructor/i.test(view.HTMLElement)
-			, is_chrome_ios =/CriOS\/[\d]+/.test(navigator.userAgent)
-			, throw_outside = function(ex) {
-				(view.setImmediate || view.setTimeout)(function() {
-					throw ex;
-				}, 0);
-			}
-			, force_saveable_type = "application/octet-stream"
-			// the Blob API is fundamentally broken as there is no "downloadfinished" event to subscribe to
-			, arbitrary_revoke_timeout = 1000 * 40 // in ms
-			, revoke = function(file) {
-				var revoker = function() {
-					if (typeof file === "string") { // file is an object URL
-						get_URL().revokeObjectURL(file);
-					} else { // file is a File
-						file.remove();
-					}
-				};
-				setTimeout(revoker, arbitrary_revoke_timeout);
-			}
-			, dispatch = function(filesaver, event_types, event) {
-				event_types = [].concat(event_types);
-				var i = event_types.length;
-				while (i--) {
-					var listener = filesaver["on" + event_types[i]];
-					if (typeof listener === "function") {
-						try {
-							listener.call(filesaver, event || filesaver);
-						} catch (ex) {
-							throw_outside(ex);
-						}
-					}
-				}
-			}
-			, auto_bom = function(blob) {
-				// prepend BOM for UTF-8 XML and text/* types (including HTML)
-				// note: your browser will automatically convert UTF-16 U+FEFF to EF BB BF
-				if (/^\s*(?:text\/\S*|application\/xml|\S*\/\S*\+xml)\s*;.*charset\s*=\s*utf-8/i.test(blob.type)) {
-					return new Blob([String.fromCharCode(0xFEFF), blob], {type: blob.type});
-				}
-				return blob;
-			}
-			, FileSaver = function(blob, name, no_auto_bom) {
-				if (!no_auto_bom) {
-					blob = auto_bom(blob);
-				}
-				// First try a.download, then web filesystem, then object URLs
-				var
-					  filesaver = this
-					, type = blob.type
-					, force = type === force_saveable_type
-					, object_url
-					, dispatch_all = function() {
-						dispatch(filesaver, "writestart progress write writeend".split(" "));
-					}
-					// on any filesys errors revert to saving with object URLs
-					, fs_error = function() {
-						if ((is_chrome_ios || (force && is_safari)) && view.FileReader) {
-							// Safari doesn't allow downloading of blob urls
-							var reader = new FileReader();
-							reader.onloadend = function() {
-								var url = is_chrome_ios ? reader.result : reader.result.replace(/^data:[^;]*;/, 'data:attachment/file;');
-								var popup = view.open(url, '_blank');
-								if(!popup) view.location.href = url;
-								url=undefined; // release reference before dispatching
-								filesaver.readyState = filesaver.DONE;
-								dispatch_all();
-							};
-							reader.readAsDataURL(blob);
-							filesaver.readyState = filesaver.INIT;
-							return;
-						}
-						// don't create more object URLs than needed
-						if (!object_url) {
-							object_url = get_URL().createObjectURL(blob);
-						}
-						if (force) {
-							view.location.href = object_url;
-						} else {
-							var opened = view.open(object_url, "_blank");
-							if (!opened) {
-								// Apple does not allow window.open, see https://developer.apple.com/library/safari/documentation/Tools/Conceptual/SafariExtensionGuide/WorkingwithWindowsandTabs/WorkingwithWindowsandTabs.html
-								view.location.href = object_url;
-							}
-						}
-						filesaver.readyState = filesaver.DONE;
-						dispatch_all();
-						revoke(object_url);
-					}
-				;
-				filesaver.readyState = filesaver.INIT;
-
-				if (can_use_save_link) {
-					object_url = get_URL().createObjectURL(blob);
-					setTimeout(function() {
-						save_link.href = object_url;
-						save_link.download = name;
-						click(save_link);
-						dispatch_all();
-						revoke(object_url);
-						filesaver.readyState = filesaver.DONE;
-					});
-					return;
-				}
-
-				fs_error();
-			}
-			, FS_proto = FileSaver.prototype
-			, saveAs = function(blob, name, no_auto_bom) {
-				return new FileSaver(blob, name || blob.name || "download", no_auto_bom);
-			}
-		;
-		// IE 10+ (native saveAs)
-		if (typeof navigator !== "undefined" && navigator.msSaveOrOpenBlob) {
-			return function(blob, name, no_auto_bom) {
-				name = name || blob.name || "download";
-
-				if (!no_auto_bom) {
-					blob = auto_bom(blob);
-				}
-				return navigator.msSaveOrOpenBlob(blob, name);
-			};
-		}
-
-		FS_proto.abort = function(){};
-		FS_proto.readyState = FS_proto.INIT = 0;
-		FS_proto.WRITING = 1;
-		FS_proto.DONE = 2;
-
-		FS_proto.error =
-		FS_proto.onwritestart =
-		FS_proto.onprogress =
-		FS_proto.onwrite =
-		FS_proto.onabort =
-		FS_proto.onerror =
-		FS_proto.onwriteend =
-			null;
-
-		return saveAs;
-	}(
-		   typeof self !== "undefined" && self
-		|| typeof window !== "undefined" && window
-		|| this.content
-	));
-	// `self` is undefined in Firefox for Android content script context
-	// while `this` is nsIContentFrameMessageManager
-	// with an attribute `content` that corresponds to the window
-
-	if (typeof module !== "undefined" && module.exports) {
-	  module.exports.saveAs = saveAs;
-	} else if (("function" !== "undefined" && __webpack_require__(81) !== null) && (__webpack_require__(42) !== null)) {
-	  !(__WEBPACK_AMD_DEFINE_ARRAY__ = [], __WEBPACK_AMD_DEFINE_RESULT__ = function() {
-	    return saveAs;
-	  }.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
-	}
-
-
-/***/ },
-/* 81 */
-/***/ function(module, exports) {
-
-	module.exports = function() { throw new Error("define cannot be used indirect"); };
 
 
 /***/ }

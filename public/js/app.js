@@ -1,12 +1,13 @@
 import Vue from 'vue'
+import Topnav from '../components/Topnav.vue'
+import Login from '../components/Login.vue'
+import Signup from '../components/Signup.vue'
+import Doclist from '../components/Doclist.vue'
 import feathers from 'feathers/client'
 import hooks from 'feathers-hooks'
 import authentication from 'feathers-authentication/client'
 import socketio from 'feathers-socketio/client'
 import io from 'socket.io-client'
-import FileSaver from 'file-saver'
-
-
 
 // Establish a Socket.io connection
 const socket = io()
@@ -21,74 +22,6 @@ const documentsService = app.service('/documents');
 const usersService= app.service('/users');
 const uploadService = app.service('uploads');
 
-Vue.component('topnav', {
-  template: '#topnav-template',
-  methods: {
-    showLogin: function(){
-      this.$parent.login = true;
-      this.$parent.logsign = true;
-    },
-    showSignup: function(){
-      this.$parent.signup= true;
-      this.$parent.logsign = true;
-    }
-  }
-})
-
-Vue.component('login', {
-  template: '#login-template'
-})
-
-Vue.component('signup', {
-  template: '#signup-template',
-  methods: {
-    doSignup: function(){
-      this.$parent.signup = false;
-      self = this;
-      usersService.create({email: this.$parent.email, password: this.$parent.password}, {}).
-        then( function (response) {
-          vm.doLogin()
-        })
-    }
-  }
-})
-
-Vue.component('doclist', {
-  template: '#doclist-template'
-})
-
-Vue.component('document', {
-    template: '#document-template',
-    props: ['document'],
-    methods: {
-        deleteDocument: function (document) {
-            vm.documents.$remove(document);
-            documentsService.remove(document.id, {});
-            uploadService.remove(document.fileName);
-        },
-        editDocument: function (document) {
-          document.editing = true;
-        },
-        updateDocument: function (document) {
-            documentsService.patch(document.id, document, {});
-            //Set editing to false to show actions again and hide the inputs
-            document.editing = false;
-        },
-        storeDocument: function (document) {
-            documentsService.create(document, {}).then(function (response) {
-              Vue.set(document, 'id', response.id);
-              document.editing = false;
-            })
-        },
-        downloadDocument: function(document) {
-          uploadService.get(document.fileName).then(function(fileObject) {
-            const blob = dataURLtoBlob(fileObject.uri);
-            FileSaver.saveAs(blob, fileObject.id);
-          })
-        }
-    }
-})
-
 const vm = new Vue({
   el: '#v-app',
   data: {
@@ -99,7 +32,15 @@ const vm = new Vue({
     documents: [],
     email: "",
     password: "",
-    jwt: ""
+    jwt: "",
+    documentsService: documentsService,
+    uploadService: uploadService
+  },
+  components: {
+    Topnav,
+    Login,
+    Signup,
+    Doclist
   },
   ready() {
     documentsService.on('created', document => {
@@ -191,14 +132,4 @@ const vm = new Vue({
   }
 })
 
-// Helper function for converting dataurl to blob, so it can be saved using FileSaver.js
-//(from: http://stackoverflow.com/questions/6850276/how-to-convert-dataurl-to-file-object-in-javascript)
-function dataURLtoBlob(dataurl) {
-    var arr = dataurl.split(','), mime = arr[0].match(/:(.*?);/)[1],
-        bstr = atob(arr[1]), n = bstr.length, u8arr = new Uint8Array(n);
-    while(n--){
-        u8arr[n] = bstr.charCodeAt(n);
-    }
-    return new Blob([u8arr], {type:mime});
-}
 
