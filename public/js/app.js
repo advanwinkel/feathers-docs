@@ -1,11 +1,21 @@
+import Vue from 'vue'
+import feathers from 'feathers/client'
+import hooks from 'feathers-hooks'
+import authentication from 'feathers-authentication/client'
+import socketio from 'feathers-socketio/client'
+import io from 'socket.io-client'
+import FileSaver from 'file-saver'
+
+
+
 // Establish a Socket.io connection
 const socket = io()
 
 // Set up Feathers client side
 const app = feathers()
-  .configure(feathers.socketio(socket))
-  .configure(feathers.hooks())
-  .configure(feathers.authentication({ storage: window.localStorage }));
+  .configure(socketio(socket))
+  .configure(hooks())
+  .configure(authentication({ storage: window.localStorage }));
 
 const documentsService = app.service('/documents');
 const usersService= app.service('/users');
@@ -34,6 +44,7 @@ Vue.component('signup', {
   methods: {
     doSignup: function(){
       this.$parent.signup = false;
+      self = this;
       usersService.create({email: this.$parent.email, password: this.$parent.password}, {}).
         then( function (response) {
           vm.doLogin()
@@ -72,13 +83,13 @@ Vue.component('document', {
         downloadDocument: function(document) {
           uploadService.get(document.fileName).then(function(fileObject) {
             const blob = dataURLtoBlob(fileObject.uri);
-            saveAs(blob, fileObject.id);
+            FileSaver.saveAs(blob, fileObject.id);
           })
         }
     }
 })
 
-vm = new Vue({
+const vm = new Vue({
   el: '#v-app',
   data: {
     logsign: false,
@@ -123,6 +134,7 @@ vm = new Vue({
       this.documents.push(newDocument);
     },
     fetchDocs: function (page_url) {
+      self = this;
 
       documentsService.find().then(function(result) {
         if (result.data) {
@@ -131,7 +143,7 @@ vm = new Vue({
               return document;
           })
             // set data on vm
-            vm.$set('documents', documentsReady);            
+            self.$set('documents', documentsReady);            
           }
       }).catch(function(error) {
         console.log('Error finding messages', error);
@@ -140,17 +152,17 @@ vm = new Vue({
     },
     doLogin: function(){
       this.login = false;
-
+      self = this;
       app.authenticate({
         email: this.email,
         password: this.password,
         type: 'local'
       }).then(function(result){
         const token = app.get('token');
-        vm.$set('jwt', token);
-        vm.fetchDocs();
-        vm.$set('docList', true);
-        vm.$set('logsign',false);
+        self.$set('jwt', token);
+        self.fetchDocs();
+        self.$set('docList', true);
+        self.$set('logsign',false);
       }).catch(function(error){
         console.error('Error authenticating!', error);
       });
@@ -163,6 +175,7 @@ vm = new Vue({
     },
     doUpload: function (file) {
       var reader = new FileReader();
+      self = this;
  
       reader.onload = function (e) {
         uploadService
@@ -170,7 +183,7 @@ vm = new Vue({
         .then(function(response){
                 // success
                 console.log('Server responded with: ', response);
-                vm.createDocument(response.id); 
+                self.createDocument(response.id); 
             });       
       };
       reader.readAsDataURL(file);
