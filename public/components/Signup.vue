@@ -26,9 +26,9 @@
     doSignup: function(){
       this.$parent.signup = false;
       self = this;
-      usersService.create({email: this.$parent.email, password: this.$parent.password}, {}).
+      this.$parent.usersService.create({email: this.$parent.email, password: this.$parent.password}, {}).
         then( function (response) {
-          vm.doLogin()
+          self.$root.doLogin()
         })
       }
     }

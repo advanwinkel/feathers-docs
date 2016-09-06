@@ -6,23 +6,20 @@
     <td class="col-md-6">
         <input v-if="document.editing" v-model="document.title" class="form-control">
         </input>
-        <!--in other occasions show the story plot-->
-            <span v-else>
+             <span v-else>
                 {{document.title}}
             </span>
     </td>
     <td>
         <input v-if="document.editing" v-model="document.author" class="form-control">
         </input>
-        <!--in other occasions show the story writer-->
-            <span v-else>
+             <span v-else>
                 {{document.author}}
             </span>
     </td>
     <td>
         <input v-if="document.editing" v-model="document.text" class="form-control">
         </input>
-        <!--in other occasions show the story writer-->
             <span v-else>
                 {{document.text}}
             </span>
@@ -34,12 +31,9 @@
           <button @click="downloadDocument(document)" class="btn btn-default">Download</button>
       </div>
       <div class="btn-group" v-else>
-          <!--If the document is taken from the db then it will have an id-->
           <button v-if="document.id" class="btn btn-primary" @click="updateDocument(document)">Update Document
           </button>
-          <!--If the document is new we want to store it-->
           <button v-else class="btn btn-success" @click="storeDocument(document)">Save New Document</button>
-          <!--Always show cancel-->
           <button @click="document.editing=false" class="btn btn-default">Cancel</button>
       </div>
     </td>
@@ -68,7 +62,7 @@
         },
         storeDocument: function (document) {
           self = this
-            this.$root.documentsService.create(document, {}).then(function (response) {
+            self.$root.documentsService.create(document, {}).then(function (response) {
               Vue.set(document, 'id', response.id);
               document.editing = false;
             })

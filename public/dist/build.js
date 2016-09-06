@@ -110,7 +110,8 @@
 	    password: "",
 	    jwt: "",
 	    documentsService: documentsService,
-	    uploadService: uploadService
+	    uploadService: uploadService,
+	    usersService: usersService
 	  },
 	  components: {
 	    Topnav: _Topnav2.default,
@@ -10608,8 +10609,8 @@
 	    doSignup: function doSignup() {
 	      this.$parent.signup = false;
 	      self = this;
-	      usersService.create({ email: this.$parent.email, password: this.$parent.password }, {}).then(function (response) {
-	        vm.doLogin();
+	      this.$parent.usersService.create({ email: this.$parent.email, password: this.$parent.password }, {}).then(function (response) {
+	        self.$root.doLogin();
 	      });
 	    }
 	  }
@@ -10750,7 +10751,7 @@
 	    },
 	    storeDocument: function storeDocument(document) {
 	      self = this;
-	      this.$root.documentsService.create(document, {}).then(function (response) {
+	      self.$root.documentsService.create(document, {}).then(function (response) {
 	        _vue2.default.set(document, 'id', response.id);
 	        document.editing = false;
 	      });
@@ -10774,23 +10775,20 @@
 	//     <td class="col-md-6">
 	//         <input v-if="document.editing" v-model="document.title" class="form-control">
 	//         </input>
-	//         <!--in other occasions show the story plot-->
-	//             <span v-else>
+	//              <span v-else>
 	//                 {{document.title}}
 	//             </span>
 	//     </td>
 	//     <td>
 	//         <input v-if="document.editing" v-model="document.author" class="form-control">
 	//         </input>
-	//         <!--in other occasions show the story writer-->
-	//             <span v-else>
+	//              <span v-else>
 	//                 {{document.author}}
 	//             </span>
 	//     </td>
 	//     <td>
 	//         <input v-if="document.editing" v-model="document.text" class="form-control">
 	//         </input>
-	//         <!--in other occasions show the story writer-->
 	//             <span v-else>
 	//                 {{document.text}}
 	//             </span>
@@ -10802,12 +10800,9 @@
 	//           <button @click="downloadDocument(document)" class="btn btn-default">Download</button>
 	//       </div>
 	//       <div class="btn-group" v-else>
-	//           <!--If the document is taken from the db then it will have an id-->
 	//           <button v-if="document.id" class="btn btn-primary" @click="updateDocument(document)">Update Document
 	//           </button>
-	//           <!--If the document is new we want to store it-->
 	//           <button v-else class="btn btn-success" @click="storeDocument(document)">Save New Document</button>
-	//           <!--Always show cancel-->
 	//           <button @click="document.editing=false" class="btn btn-default">Cancel</button>
 	//       </div>
 	//     </td>
@@ -11053,7 +11048,7 @@
 /* 19 */
 /***/ function(module, exports) {
 
-	module.exports = "\n  <tr>\n    <td>\n        {{document.id}}\n    </td>\n    <td class=\"col-md-6\">\n        <input v-if=\"document.editing\" v-model=\"document.title\" class=\"form-control\">\n        </input>\n        <!--in other occasions show the story plot-->\n            <span v-else>\n                {{document.title}}\n            </span>\n    </td>\n    <td>\n        <input v-if=\"document.editing\" v-model=\"document.author\" class=\"form-control\">\n        </input>\n        <!--in other occasions show the story writer-->\n            <span v-else>\n                {{document.author}}\n            </span>\n    </td>\n    <td>\n        <input v-if=\"document.editing\" v-model=\"document.text\" class=\"form-control\">\n        </input>\n        <!--in other occasions show the story writer-->\n            <span v-else>\n                {{document.text}}\n            </span>\n    </td>\n    <td>   \n      <div class=\"btn-group\" v-if=\"!document.editing\">\n          <button @click=\"editDocument(document)\" class=\"btn btn-default\">Edit</button>\n          <button @click=\"deleteDocument(document)\" class=\"btn btn-danger\">Delete</button>\n          <button @click=\"downloadDocument(document)\" class=\"btn btn-default\">Download</button>\n      </div>\n      <div class=\"btn-group\" v-else>\n          <!--If the document is taken from the db then it will have an id-->\n          <button v-if=\"document.id\" class=\"btn btn-primary\" @click=\"updateDocument(document)\">Update Document\n          </button>\n          <!--If the document is new we want to store it-->\n          <button v-else class=\"btn btn-success\" @click=\"storeDocument(document)\">Save New Document</button>\n          <!--Always show cancel-->\n          <button @click=\"document.editing=false\" class=\"btn btn-default\">Cancel</button>\n      </div>\n    </td>\n  </tr>\n";
+	module.exports = "\n  <tr>\n    <td>\n        {{document.id}}\n    </td>\n    <td class=\"col-md-6\">\n        <input v-if=\"document.editing\" v-model=\"document.title\" class=\"form-control\">\n        </input>\n             <span v-else>\n                {{document.title}}\n            </span>\n    </td>\n    <td>\n        <input v-if=\"document.editing\" v-model=\"document.author\" class=\"form-control\">\n        </input>\n             <span v-else>\n                {{document.author}}\n            </span>\n    </td>\n    <td>\n        <input v-if=\"document.editing\" v-model=\"document.text\" class=\"form-control\">\n        </input>\n            <span v-else>\n                {{document.text}}\n            </span>\n    </td>\n    <td>   \n      <div class=\"btn-group\" v-if=\"!document.editing\">\n          <button @click=\"editDocument(document)\" class=\"btn btn-default\">Edit</button>\n          <button @click=\"deleteDocument(document)\" class=\"btn btn-danger\">Delete</button>\n          <button @click=\"downloadDocument(document)\" class=\"btn btn-default\">Download</button>\n      </div>\n      <div class=\"btn-group\" v-else>\n          <button v-if=\"document.id\" class=\"btn btn-primary\" @click=\"updateDocument(document)\">Update Document\n          </button>\n          <button v-else class=\"btn btn-success\" @click=\"storeDocument(document)\">Save New Document</button>\n          <button @click=\"document.editing=false\" class=\"btn btn-default\">Cancel</button>\n      </div>\n    </td>\n  </tr>\n";
 
 /***/ },
 /* 20 */

@@ -34,7 +34,8 @@ const vm = new Vue({
     password: "",
     jwt: "",
     documentsService: documentsService,
-    uploadService: uploadService
+    uploadService: uploadService,
+    usersService: usersService
   },
   components: {
     Topnav,
